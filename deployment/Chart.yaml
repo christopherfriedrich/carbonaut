@@ -1,0 +1,17 @@
+apiVersion: v2
+name: carbonaut
+description: Carbonaut
+type: application
+version: 0.1.0
+appVersion: "0.0.1"
+home: https://carbonaut.cloud/
+icon: https://github.com/carbonaut-cloud/community/blob/main/branding/logos/carbonaut-logo.svg
+dependencies:
+  - name: mimir-distributed
+    alias: mimir
+    version: 4.0.0-weekly.207
+    repository: https://grafana.github.io/helm-charts
+  - name: grafana
+    alias: grafana
+    version: 6.40.05
+    repository: https://grafana.github.io/helm-charts
