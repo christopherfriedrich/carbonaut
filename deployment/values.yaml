@@ -1,0 +1,13 @@
+global:
+  namespace: carbonaut
+
+grafana:
+  datasources: 
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://carbonaut-mimir-nginx.carbonaut.svc:80/prometheus
+        access: proxy
+        isDefault: true
