@@ -56,4 +56,4 @@ cscope.*
 /.make/
 
 # Ignore compiled grpc API spec Golang
-pkg/api/v*
+pkg/api/*.go
