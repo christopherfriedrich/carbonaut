@@ -35,5 +35,6 @@ compile-grpc:
 
 	protoc -I=api/v1 --js_out=import_style=commonjs,binary:./ui/packages/api/dist --grpc-web_out=import_style=typescript,mode=grpcweb:./ui/packages/api/dist carbonaut.proto
 
-# mv ui/packages/api/dist/api/v1/* ui/packages/api/dist
-# rmdir ui/packages/api/dist/api/v1 ui/packages/api/dist/api
+    # Workaround to make generated files usable as dependency
+	rm ui/packages/api/dist/index.ts
+	echo "export * from './CarbonautServiceClientPb';\nexport * from './carbonaut_pb';\r" > ui/packages/api/dist/index.ts
