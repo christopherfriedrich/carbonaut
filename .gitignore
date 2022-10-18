@@ -55,3 +55,5 @@ cscope.*
 # make-related metadata
 /.make/
 
+# Ignore compiled grpc API spec Golang
+pkg/api/v*

@@ -1,0 +1,26 @@
+// Copyright (c) 2022 CARBONAUT AUTHOR
+//
+// Licensed under the MIT license: https://opensource.org/licenses/MIT
+// Permission is granted to use, copy, modify, and redistribute the work.
+// Full license information available in the project LICENSE file.
+
+syntax = "proto3";
+
+option go_package = "carbonaut/pkg/api/v1;carbonaut";
+package carbonaut.api.v1;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}
