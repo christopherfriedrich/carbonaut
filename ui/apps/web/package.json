@@ -18,13 +18,13 @@
     "@carbonaut-cloud/api": "workspace:*"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "7.19.3",
     "eslint-config-custom": "workspace:*",
-    "eslint": "7.32.0",
-    "next-transpile-modules": "9.0.0",
+    "eslint": "8.25.0",
+    "next-transpile-modules": "9.1.0",
     "tsconfig": "workspace:*",
-    "@types/node": "^17.0.12",
-    "@types/react": "18.0.17",
-    "typescript": "^4.5.3"
+    "@types/node": "18.11.2",
+    "@types/react": "18.0.21",
+    "typescript": "4.8.4"
   }
 }
