@@ -4,7 +4,7 @@
 # Permission is granted to use, copy, modify, and redistribute the work.
 # Full license information available in the project LICENSE file.
 
-verify: swag verify-go-mod verify-git verify-build verify-lint verify-test-unit
+verify: verify-go-mod verify-git verify-build verify-lint verify-test-unit
 
 verify-build:
 	./hack/check-build.sh
@@ -25,17 +25,15 @@ verify-git:
 upgrade:
 	go get -u -t ./...
 
-install: 
-	# install swagger tool to compile swagger carbonaut api definition 
-	go install github.com/swaggo/swag/cmd/swag@v1.8.6
+install-go: 
 	go get ./...
 
 compile-grpc:
-	protoc --go_out=pkg --go_opt=paths=source_relative --go-grpc_out=pkg --go-grpc_opt=paths=source_relative api/v1/carbonaut.proto
+	protoc -I=api/v1 --go_out=pkg/api --go_opt=paths=source_relative --go-grpc_out=pkg/api --go-grpc_opt=paths=source_relative carbonaut.proto
 
 	mkdir -p ui/packages/api/dist
 
-	protoc api/v1/carbonaut.proto --js_out=import_style=commonjs,binary:./ui/packages/api/dist --grpc-web_out=import_style=typescript,mode=grpcweb:./ui/packages/api/dist
+	protoc -I=api/v1 --js_out=import_style=commonjs,binary:./ui/packages/api/dist --grpc-web_out=import_style=typescript,mode=grpcweb:./ui/packages/api/dist carbonaut.proto
 
-	mv ui/packages/api/dist/api/v1/* ui/packages/api/dist
-	rmdir ui/packages/api/dist/api/v1 ui/packages/api/dist/api
+# mv ui/packages/api/dist/api/v1/* ui/packages/api/dist
+# rmdir ui/packages/api/dist/api/v1 ui/packages/api/dist/api
