@@ -9,18 +9,140 @@ syntax = "proto3";
 option go_package = "carbonaut/pkg/api/v1;carbonaut";
 package carbonaut.api.v1;
 
-// The greeting service definition.
-service Greeter {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/rpc/code.proto";
+
+// Error Model; see https://cloud.google.com/apis/design/errors
+// message Status example:
+// {
+//   "error": {
+//     "code": 400,
+//     "message": "API key not valid. Please pass a valid API key.",
+//     "status": "INVALID_ARGUMENT",
+//     "details": [
+//       {
+//         "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+//         "reason": "API_KEY_INVALID",
+//         "domain": "googleapis.com",
+//         "metadata": {
+//           "service": "translate.googleapis.com"
+//         }
+//       }
+//     ]
+//   }
+// }
+message Status {
+  // A simple error code that can be easily handled by the client. The
+  // actual error code is defined by `google.rpc.Code`.
+  google.rpc.Code code = 1;
+  // A developer-facing human-readable error message in English. It should
+  // both explain the error and offer an actionable resolution to it.
+  string message = 2;
+  // Additional error information that the client code can use to handle
+  // the error, such as retry info or a help link.
+  repeated google.protobuf.Any details = 3;
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
+
+//
+// Data Models
+//
+
+
+message EmissionRecord {
+  enum EMISSION_FORMULA {
+    CALCULATION_A = 1;
+  }
+  // enum EMISSION_SCOPE {
+  //   SCOPE_1 = 1;
+  //   SCOPE_2 = 2;
+  //   SCOPE_3 = 3;
+  // }
+  message CarbonRecord {
+    float carbon_footprint_kgCO2e = 1;
+    EMISSION_FORMULA formula = 2;
+    // EMISSION_SCOPE scope = 3;
+    float estimation_offset = 3;
+  }
+  Meta meta = 1;
+  // Information about the it resource
+  ITResource it_resource = 2;
+  // Identifier of the IT-Resource the data is from
+  repeated string project_id = 3;
+  // Identifying name of the IT-Resource
+  string service_name = 4;
+  // Location of the responsible IT-Resource
+  Location location = 5;
+  // Carbon footprint total for IT-Resource
+  CarbonRecord carbon_footprint_estimation_total = 6;
+  // Carbon footprint caused by market
+  CarbonRecord carbon_footprint_estimation_market_base = 7;
+  // Carbon footprint caused by location
+  CarbonRecord carbon_footprint_estimation_location_base = 8;
 }
 
-// The response message containing the greetings
-message HelloReply {
-  string message = 1;
+message ITResource {
+  // Month during which this usage occurred
+  UsageTime usage_time = 2;
+  // Identifier of the IT-Resource the data is from
+  repeated string project_id = 3;
+  // Identifying name of the IT-Resource
+  string service_name = 4;
+  // Location of the responsible IT-Resource
+  Location location = 5;
+}
+
+// General meta information about a data
+message Meta {
+  // Timestamp when the entity has been stored
+  google.protobuf.Timestamp created_at = 1;
+  // Timestamp when the article has been updated
+  google.protobuf.Timestamp updated_at = 2;
+}
+
+// Time interval
+message UsageTime {
+  google.protobuf.Timestamp usage_start = 1;
+  google.protobuf.Timestamp usage_end = 2;
+}
+
+// GEO Location of a resource
+message Location {
+  // country of the resource (like 'Germany')
+  string country = 1;
+  // region of the resource (like 'Hamburg')
+  string region = 2;
+  // coordinates
+  string latitude = 3;
+  // coordinates
+  string longitude = 4; 
+}
+
+
+//
+// gRPC
+//
+
+
+service EmissionData {
+  rpc ListITResourceEmissionRecords (ListITResourceCarbonEmissionsRequest) returns (ListITResourceCarbonEmissionsResponse) {}
+}
+
+// List
+message ListITResourceCarbonEmissionsRequest {
+  // The parent should be set to a newspaper
+  ITResource it_resource = 1 [(google.api.field_behavior) = REQUIRED];
+  // The maximum number of items to return.
+  int32 page_size = 2 [(google.api.field_behavior) = REQUIRED];
+  // The next_page_token value returned from a previous List request, if any.
+  string page_token = 3 [(google.api.field_behavior) = REQUIRED];
+}
+message ListITResourceCarbonEmissionsResponse {
+  repeated CarbonRecord emission_data = 1;
+  // Token to retrieve the next page of results, or empty if there are no
+  // more results in the list.
+  string next_page_token = 2;
+  Status status = 3;
 }
