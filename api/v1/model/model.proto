@@ -1,0 +1,98 @@
+// Copyright (c) 2022 CARBONAUT AUTHOR
+//
+// Licensed under the MIT license: https://opensource.org/licenses/MIT
+// Permission is granted to use, copy, modify, and redistribute the work.
+// Full license information available in the project LICENSE file.
+
+
+syntax = "proto3";
+
+package carbonaut.api.v1.model;
+
+import "google/protobuf/any.proto";
+import "util/util.proto";
+
+option go_package = "github.com/carbonaut/pkg/api/model;model";
+
+enum EMISSION_FORMULA {
+    CALCULATION_A = 0;
+}
+
+// enum EMISSION_SCOPE {
+//   SCOPE_1 = 1;
+//   SCOPE_2 = 2;
+//   SCOPE_3 = 3;
+// }
+
+message CarbonRecord {
+    float carbon_footprint_kgCO2e = 1;
+    EMISSION_FORMULA formula = 2;
+    // EMISSION_SCOPE scope = 3;
+    float estimation_offset = 3;
+}
+
+message Emission {
+    carbonaut.api.v1.util.RecordMeta meta = 1;
+    // Information about the it resource
+    carbonaut.api.v1.model.ITResource it_resource = 2;
+    // energy mix record
+    // Month during which this usage occurred
+    carbonaut.api.v1.util.UsageTime recorded_time_span = 3;
+    // Carbon footprint total for IT-Resource
+    CarbonRecord carbon_footprint_estimation_total = 4;
+    // Carbon footprint caused by market
+    CarbonRecord carbon_footprint_estimation_market_average = 5;
+    // Carbon footprint caused by location
+    CarbonRecord carbon_footprint_estimation_location_average = 6;
+}
+  
+
+// GEO Location of a resource
+message Location {
+    // country of the resource (like 'Germany')
+    string country = 1;
+    // region of the resource (like 'eu-west-1' for AWS Frankfurt)
+    string region = 2;
+    // region of the resource (like 'eu-west-1a')
+    string area = 3;
+    // coordinates
+    string latitude = 4;
+    // coordinates
+    string longitude = 5; 
+}
+
+
+message ITResource {
+    // Identifying name of the IT-Resource
+    string service_name = 1;
+    // Identifier of the IT-Resource the data is from
+    string project_id = 2;
+    // Location of the responsible IT-Resource
+    carbonaut.api.v1.model.Location location = 3;
+    // List of hardware components of the IT-Resource
+    repeated ITResourceComponent hardware_components = 4;
+}
+
+enum IT_RESOURCE_COMPONENT_CATEGORIES {
+    // Central Procession unit or Processor of a server
+    CPU = 0;
+    // Random Access Memory or RAM (Memory)
+    RAM = 1;
+    // Hard Disk is the storage capacity of your server/computer (e.g. SATA, SSD, NVMe, ...)
+    HardDisk = 2;
+    // Component used to connect server components to each other
+    Motherboard = 3;
+    // Power connectivity or electric supply cable
+    PowerSupply = 4;
+}
+
+message ITResourceComponent {
+    // Name of the hardware component like ('HardDisk' or 'CPU')
+    IT_RESOURCE_COMPONENT_CATEGORIES name_category = 1;
+    // Model name of the hardware component
+    string model_name = 2;
+    // Number of components
+    int32 count_of_the_component_used = 3;
+    // Additional details in a undefined format
+    repeated google.protobuf.Any details = 4;
+}
