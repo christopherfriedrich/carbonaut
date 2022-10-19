@@ -57,3 +57,5 @@ cscope.*
 
 # Ignore compiled grpc API spec Golang
 pkg/api/*.go
+
+ui/packages/api/dist/*
