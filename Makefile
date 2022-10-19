@@ -28,6 +28,9 @@ upgrade:
 install-go: 
 	go get ./...
 
+run-api-server-with-fake:
+	go run cmd/api/main.go -fake-data -port 50051
+
 compile-grpc:
 	protoc -I=api/v1 --go_out=pkg/api --go_opt=paths=source_relative --go-grpc_out=pkg/api --go-grpc_opt=paths=source_relative api/v1/api.proto
 	protoc -I=api/v1 --go_out=pkg/api --go_opt=paths=source_relative --go-grpc_out=pkg/api --go-grpc_opt=paths=source_relative api/v1/*/*.proto
