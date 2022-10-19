@@ -6,7 +6,7 @@
 
 syntax = "proto3";
 
-option go_package = "carbonaut/pkg/api/v1;carbonaut";
+option go_package = "carbonaut/pkg/api/v1;api";
 package carbonaut.api.v1;
 
 // The greeting service definition.

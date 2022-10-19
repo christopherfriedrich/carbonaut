@@ -10,15 +10,8 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/carbonaut/pkg/api"
-	"github.com/carbonaut/pkg/utils"
-	"github.com/rs/zerolog/log"
 )
 
 func main() {
 	fmt.Println("api is not implemented yet!")
-	if err := api.Start(&api.Config{Port: utils.EnvDefault("API_PORT", "8081")}); err != nil {
-		log.Fatal().Err(err)
-	}
 }
