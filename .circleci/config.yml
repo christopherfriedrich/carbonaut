@@ -1,0 +1,89 @@
+version: 2.1
+
+commands:
+  pre-run:
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+
+orbs:
+  node: circleci/node@5.0.3
+
+executors:
+  base-executor:
+    docker:
+      - image: cimg/go:1.19.2
+    # https://circleci.com/docs/2.0/configuration-reference/#docker-executor
+    # https://hub.docker.com/r/cimg/go/tags
+    steps:
+      - checkout
+      - node/install:
+          node-version: '16.13'
+      - run: echo "check node and golang version" && node --version && go version
+      - run: sudo npm install -g npm@latest
+      - run: sudo npm install -g pnpm
+    resource_class: medium
+
+jobs:
+  #
+  # INSTALL / SETUP
+  install:
+    executor: base-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}
+      - npm-run: build
+      - run: apt install -y protobuf-compiler
+      # - run: curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
+      - run: npm install -g protoc-gen-grpc-web
+      - run: make install
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+
+  #
+  # CHECK {go, ts, go-e2e, misc}
+  check-go:
+    executor: base-executor
+    steps:
+      - pre-run
+      - run: make check-go
+
+  check-ts:
+    executor: base-executor
+    steps:
+      - pre-run
+      - run: make check-ts
+
+  check-misc:
+    executor: base-executor
+    steps:
+      - pre-run
+      - run: make check-misc
+
+  check-go-e2e:
+    executor: base-executor
+    parallelism: 5
+    steps:
+      - pre-run
+      - run: go test -v $(go list ./... | circleci tests split --split-by=timings)
+
+workflows:
+  integration:
+    jobs:
+      - install
+      - check-misc:
+          requires: [install]
+      - check-go:
+          requires: [install]
+      - check-go-e2e:
+          requires: [install]
+          filters:
+            branches: 
+              only: /^main/
+      - check-ts:
+          requires: [install]
