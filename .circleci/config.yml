@@ -31,6 +31,8 @@ jobs:
             - go-mod-v4-{{ checksum "go.sum" }}
       - node/install:
           node-version: '16.13'
+      - run: protobuf/install
+      - run: protoc
       - run: echo "check protoc, node and golang version" && node --version && go version && protoc --version
       - run: npm install -g pnpm
       - run: npm install -g protoc-gen-grpc-web
