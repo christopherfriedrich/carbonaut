@@ -1,0 +1,94 @@
+version: 2.1
+
+commands:
+  pre-run:
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+
+orbs:
+  node: circleci/node@5.0.3
+
+executors:
+  base-executor:
+    docker:
+      - image: cimg/go:1.19.2
+    # https://circleci.com/docs/2.0/configuration-reference/#docker-executor
+    # https://hub.docker.com/r/cimg/go/tags
+    resource_class: medium
+
+jobs:
+  #
+  # INSTALL / SETUP
+  install:
+    executor: base-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}
+      - node/install:
+          node-version: '16.13'
+      - run: sudo apt update
+      - run: sudo apt install -y protobuf-compiler
+      - run: echo "check versions" && apt --version && node --version && go version && protoc --version
+      - run: npm install -g pnpm
+      - run: npm install -g protoc-gen-grpc-web
+      - run: echo "Install gRPC and protobuf libraries for golang"
+      - run: go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+      - run: go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+      - run: make install
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: .
+          paths:
+            - .
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+
+  #
+  # CHECK {go, ts, go-e2e, misc}
+  check-go:
+    executor: base-executor
+    steps:
+      - pre-run
+      - run: make check-go
+
+  check-ts:
+    executor: base-executor
+    steps:
+      - pre-run
+      - run: make check-ts
+
+  check-misc:
+    executor: base-executor
+    steps:
+      - pre-run
+      - run: make check-misc
+
+  check-go-e2e:
+    executor: base-executor
+    parallelism: 5
+    steps:
+      - pre-run
+      - run: go test -v $(go list ./... | circleci tests split --split-by=timings)
+
+workflows:
+  integration:
+    jobs:
+      - install
+      - check-misc:
+          requires: [install]
+      - check-go:
+          requires: [install]
+      - check-go-e2e:
+          requires: [install]
+          filters:
+            branches: 
+              only: /^main/
+      - check-ts:
+          requires: [install]
