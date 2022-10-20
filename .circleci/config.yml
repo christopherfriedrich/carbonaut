@@ -4,7 +4,6 @@ commands:
   pre-run:
     steps:
       - checkout
-      - run: make compile-grpc
       - attach_workspace:
           at: .
 
@@ -40,6 +39,12 @@ jobs:
       - run: go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
       - run: go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
       - run: make install
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: .
+          paths:
+            - .
       - save_cache:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
