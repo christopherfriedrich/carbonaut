@@ -44,10 +44,6 @@ install-pnpm:
 	echo "install-pnpm steps not implemented; TODO"
 
 install-go:
-	echo "Install gRPC and protobuf libraries for golang"
-	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-	echo "Install project dependencies"
 	go get ./...
 
 compile-grpc:
