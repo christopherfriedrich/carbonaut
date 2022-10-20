@@ -6,7 +6,7 @@
 
 verify: check-misc check-go check-ts check-go-e2e
 
-check-misc: check-git
+check-misc: install check-git
 check-go: check-go-mod check-go-build check-go-lint
 check-go-e2e: check-go-test-unit
 check-ts: check-ts-lint
