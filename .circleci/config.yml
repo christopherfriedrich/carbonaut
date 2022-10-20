@@ -77,6 +77,13 @@ jobs:
       - pre-run
       - run: go test -v $(go list ./... | circleci tests split --split-by=timings)
 
+  deploy-container-images:
+    executor: base-executor
+    steps:
+      - pre-run
+      # https://circleci.com/developer/orbs/orb/buildpacks/pack
+      - run: make build-container-images
+
 workflows:
   integration:
     jobs:
@@ -92,3 +99,8 @@ workflows:
               only: /^main/
       - check-ts:
           requires: [install]
+      - deploy-container-images:
+          requires: [check-misc, check-go, check-go-e2e, check-ts]
+          filters:
+            branches: 
+              only: /^main/

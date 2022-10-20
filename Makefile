@@ -67,3 +67,14 @@ upgrade-go:
 
 run-api-server-with-fake:
 	go run cmd/api/main.go -fake-data -port 50051
+
+#
+# Container Image
+#
+
+build-container-images:
+	echo "TODO"
+
+
+build-agent:
+	docker build -f build/Containerfile.agent -t carbonaut-agent .

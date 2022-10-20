@@ -1,0 +1,31 @@
+FROM golang:1.19 as go-env
+
+WORKDIR /agent
+
+RUN apt update
+RUN apt install -y protobuf-compiler
+RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+
+RUN ls
+RUN pwd
+
+COPY . /agent/
+
+RUN CGO_ENABLED=0 go build -o /go/bin/agent/ ./cmd/agent/main.go
+
+FROM node:14 as node-go-env
+
+COPY --from=go-env /agent/go-env /usr/local/bin/
+
+RUN npm install -g pnpm
+RUN npm install -g protoc-gen-grpc-web
+
+RUN make install
+
+COPY . /agent/
+
+FROM gcr.io/distroless/static-debian11 as prod
+
+COPY --from=node-go-env go/bin/agent /
+CMD ["/agent"]
