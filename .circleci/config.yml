@@ -9,7 +9,7 @@ commands:
 
 orbs:
   node: circleci/node@5.0.3
-  protobuf: izumin5210/protobuf@0.0.1
+  protobuf: izumin5210/protobuf@0.1.0
 
 executors:
   base-executor:
