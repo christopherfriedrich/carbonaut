@@ -4,6 +4,7 @@ commands:
   pre-run:
     steps:
       - checkout
+      - run: make compile-grpc
       - attach_workspace:
           at: .
 
@@ -30,10 +31,9 @@ jobs:
             - go-mod-v4-{{ checksum "go.sum" }}
       - node/install:
           node-version: '16.13'
-      - run: apt --version
       - run: sudo apt update
       - run: sudo apt install -y protobuf-compiler
-      - run: echo "check protoc, node and golang version" && node --version && go version && protoc --version
+      - run: echo "check versions" && apt --version && node --version && go version && protoc --version
       - run: npm install -g pnpm
       - run: npm install -g protoc-gen-grpc-web
       - run: echo "Install gRPC and protobuf libraries for golang"
