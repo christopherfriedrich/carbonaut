@@ -38,7 +38,7 @@ check-git:
 #
 
 # NOTE: it's required to install grpc libraries first, see file: carbonaut/api/v1/README.md
-install: install-go install-pnpm compile-grpc
+install: compile-grpc install-go install-pnpm
 
 install-pnpm:
 	echo "install-pnpm steps not implemented; TODO"
