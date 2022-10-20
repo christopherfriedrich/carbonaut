@@ -9,6 +9,7 @@ commands:
 
 orbs:
   node: circleci/node@5.0.3
+  protobuf: izumin5210/protobuf@0.0.1
 
 executors:
   base-executor:
@@ -30,9 +31,8 @@ jobs:
             - go-mod-v4-{{ checksum "go.sum" }}
       - node/install:
           node-version: '16.13'
-      - run: echo "check node and golang version" && node --version && go version
+      - run: echo "check protoc, node and golang version" && node --version && go version && protoc --version
       - run: npm install -g pnpm
-      - run: sudo apt install -y protobuf-compiler
       - run: npm install -g protoc-gen-grpc-web
       - run: make install
       - save_cache:
