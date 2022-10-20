@@ -31,11 +31,8 @@ jobs:
       - node/install:
           node-version: '16.13'
       - run: echo "check node and golang version" && node --version && go version
-      - run: sudo npm install -g npm@latest
-      - run: sudo npm install -g pnpm
-      - npm-run: build
+      - run: npm install -g pnpm
       - run: apt install -y protobuf-compiler
-      # - run: curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
       - run: npm install -g protoc-gen-grpc-web
       - run: make install
       - save_cache:
