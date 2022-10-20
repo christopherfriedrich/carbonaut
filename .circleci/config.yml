@@ -16,13 +16,6 @@ executors:
       - image: cimg/go:1.19.2
     # https://circleci.com/docs/2.0/configuration-reference/#docker-executor
     # https://hub.docker.com/r/cimg/go/tags
-    steps:
-      - checkout
-      - node/install:
-          node-version: '16.13'
-      - run: echo "check node and golang version" && node --version && go version
-      - run: sudo npm install -g npm@latest
-      - run: sudo npm install -g pnpm
     resource_class: medium
 
 jobs:
@@ -35,6 +28,11 @@ jobs:
       - restore_cache:
           keys:
             - go-mod-v4-{{ checksum "go.sum" }}
+      - node/install:
+          node-version: '16.13'
+      - run: echo "check node and golang version" && node --version && go version
+      - run: sudo npm install -g npm@latest
+      - run: sudo npm install -g pnpm
       - npm-run: build
       - run: apt install -y protobuf-compiler
       # - run: curl -fsSL "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" -o /bin/pnpm; chmod +x /bin/pnpm;
