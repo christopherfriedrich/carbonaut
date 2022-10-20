@@ -9,7 +9,6 @@ commands:
 
 orbs:
   node: circleci/node@5.0.3
-  protobuf: izumin5210/protobuf@0.1.0
 
 executors:
   base-executor:
@@ -31,8 +30,11 @@ jobs:
             - go-mod-v4-{{ checksum "go.sum" }}
       - node/install:
           node-version: '16.13'
-      - run: protobuf/install
-      - run: protoc
+      - run: PROTOC_ZIP=protoc-3.14.0-linux-x86_64.zip
+      - run: curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.14.0/$PROTOC_ZIP
+      - run: sudo unzip -o $PROTOC_ZIP -d /usr/local bin/protoc
+      - run: sudo unzip -o $PROTOC_ZIP -d /usr/local 'include/*'
+      - run: rm -f $PROTOC_ZIP
       - run: echo "check protoc, node and golang version" && node --version && go version && protoc --version
       - run: npm install -g pnpm
       - run: npm install -g protoc-gen-grpc-web
