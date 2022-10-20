@@ -1,0 +1,57 @@
+// Copyright (c) 2022 CARBONAUT AUTHOR
+//
+// Licensed under the MIT license: https://opensource.org/licenses/MIT
+// Permission is granted to use, copy, modify, and redistribute the work.
+// Full license information available in the project LICENSE file.
+
+syntax = "proto3";
+
+option go_package = "github.com/carbonaut/pkg/api/api;api";
+package carbonaut.api.v1;
+
+import "model/model.proto";
+import "util/util.proto";
+
+service EmissionData {
+  rpc ListEmissionsForITResource (ListEmissionsForITResourceRequest) returns (ListEmissionsForITResourceResponse) {}
+
+  // rpc ListEnergyDataForITResource (ListEnergyDataForITResourceRequest) returns (ListEnergyDataForITResourceResponse) {}
+
+  rpc ListITResourcesForProject (ListITResourcesForProjectRequest) returns (ListITResourcesForProjectResponse) {}
+}
+
+// List IT Resources
+message ListITResourcesForProjectRequest {
+  // Project id to look for IT Resources
+  string project_id = 1;
+  // The maximum number of items to return.
+  int32 page_size = 2;
+  // The next_page_token value returned from a previous List request, if any.
+  string page_token = 3;
+}
+message ListITResourcesForProjectResponse {
+  // IT Resources found
+  repeated carbonaut.api.v1.model.ITResource it_resources = 1;
+  // Token to retrieve the next page of results, or empty if there are no more results in the list.
+  string next_page_token = 2;
+  // Request status information
+  carbonaut.api.v1.util.Status status = 3;
+}
+
+// List Emission Records for IT Resource
+message ListEmissionsForITResourceRequest {
+  // IT Resource to search emission data
+  carbonaut.api.v1.model.ITResource it_resource = 1;
+  // The maximum number of items to return.
+  int32 page_size = 2;
+  // The next_page_token value returned from a previous List request, if any.
+  string page_token = 3;
+}
+message ListEmissionsForITResourceResponse {
+  repeated carbonaut.api.v1.model.Emission emission_data = 1;
+  // Token to retrieve the next page of results, or empty if there are no
+  // more results in the list.
+  string next_page_token = 2;
+  // Request status information
+  carbonaut.api.v1.util.Status status = 3;
+}
