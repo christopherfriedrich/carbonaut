@@ -32,7 +32,7 @@ jobs:
           node-version: '16.13'
       - run: echo "check node and golang version" && node --version && go version
       - run: npm install -g pnpm
-      - run: apt install -y protobuf-compiler
+      - run: sudo apt install -y protobuf-compiler
       - run: npm install -g protoc-gen-grpc-web
       - run: make install
       - save_cache:
