@@ -40,8 +40,6 @@ jobs:
       - run: go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
       - run: make install
       - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
           root: .
           paths:
             - .
@@ -50,8 +48,7 @@ jobs:
           paths:
             - "/go/pkg/mod"
 
-  #
-  # CHECK {go, ts, go-e2e, misc}
+  # CHECK {go, ts, go-e2e}
   check-go:
     executor: base-executor
     steps:
@@ -64,12 +61,6 @@ jobs:
       - pre-run
       - run: make check-ts
 
-  check-misc:
-    executor: base-executor
-    steps:
-      - pre-run
-      - run: make check-misc
-
   check-go-e2e:
     executor: base-executor
     parallelism: 5
@@ -77,19 +68,19 @@ jobs:
       - pre-run
       - run: go test -v $(go list ./... | circleci tests split --split-by=timings)
 
-  deploy-container-images:
+  build-and-push:
     executor: base-executor
     steps:
       - pre-run
-      # https://circleci.com/developer/orbs/orb/buildpacks/pack
-      - run: make build-container-images
+      - setup_remote_docker
+      - run: docker build -f build/Containerfile.api -t carbonaut-api .
+      - run: docker tag carbonaut-api ghcr.io/carbonaut-cloud/carbonaut-api:latest
+      - run: docker push ghcr.io/carbonaut-cloud/carbonaut:api-latest
 
 workflows:
   integration:
     jobs:
       - install
-      - check-misc:
-          requires: [install]
       - check-go:
           requires: [install]
       - check-go-e2e:
@@ -99,8 +90,5 @@ workflows:
               only: /^main/
       - check-ts:
           requires: [install]
-      - deploy-container-images:
-          requires: [check-misc, check-go, check-go-e2e, check-ts]
-          filters:
-            branches: 
-              only: /^main/
+      - build-and-push:
+          requires: [install]

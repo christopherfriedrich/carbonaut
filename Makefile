@@ -73,8 +73,13 @@ run-api-server-with-fake:
 #
 
 build-container-images:
-	echo "TODO"
+	docker build -f build/Containerfile.api -t carbonaut-api .
 
+tag-container-images:
+	docker tag carbonaut-api ghcr.io/carbonaut-cloud/carbonaut-api:latest
+
+push-container-images:
+	docker push ghcr.io/carbonaut-cloud/carbonaut-api:latest
 
 build-agent:
 	docker build -f build/Containerfile.agent -t carbonaut-agent .
