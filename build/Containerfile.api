@@ -3,6 +3,7 @@ FROM golang:1.19.2 as goenv
 WORKDIR /api
 
 RUN apt update
+RUN apt install bash
 RUN apt install -y protobuf-compiler
 
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
@@ -13,7 +14,7 @@ RUN mv protoc-gen-grpc-web /bin/
 
 COPY . /api/
 
-RUN make install
+RUN ["/bin/bash -c 'make install'"]
 
 RUN CGO_ENABLED=0 go build -o /go/bin/api/ ./cmd/api/main.go
 

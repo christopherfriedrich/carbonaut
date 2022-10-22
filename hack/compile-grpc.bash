@@ -25,8 +25,8 @@ mkdir -p ui\/packages\/@carbonaut-cloud-api\/dist
 
 echo "Generate gRPC files for carbonaut-ui"
 
-protoc -I="api/v1" --js_out="import_style"="commonjs,binary:./ui/packages/@carbonaut-cloud-api/dist" --grpc-web_out="import_style"="typescript,mode"="grpcweb:./ui/packages/@carbonaut-cloud-api/dist" api/v1/api.proto
-protoc -I="api/v1" --js_out="import_style"="commonjs,binary:./ui/packages/@carbonaut-cloud-api/dist" --grpc-web_out="import_style"="typescript",mode="grpcweb:./ui/packages/@carbonaut-cloud-api/dist" api/v1/*/*.proto
+protoc -I="api/v1" --js_out="import_style"="commonjs,binary:./ui/packages/@carbonaut-cloud-api/dist" --grpc-web_out="import_style=typescript,mode=grpcweb:./ui/packages/@carbonaut-cloud-api/dist" api/v1/api.proto
+protoc -I="api/v1" --js_out="import_style=commonjs,binary:./ui/packages/@carbonaut-cloud-api/dist" --grpc-web_out="import_style"="typescript,mode=grpcweb:./ui/packages/@carbonaut-cloud-api/dist" api/v1/*/*.proto
 
 # NOTE: Workaround to make generated files usable as dependency
 echo "export * from './ApiServiceClientPb';\nexport * from './api_pb';\r" > ui/packages/@carbonaut-cloud-api/dist/index.ts
