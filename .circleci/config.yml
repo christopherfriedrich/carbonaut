@@ -69,13 +69,12 @@ jobs:
       - run: go test -v $(go list ./... | circleci tests split --split-by=timings)
 
   build-and-push:
-    executor: base-executor
+    docker:
+      - image: cimg/base:2022.10
     steps:
       - pre-run
       - setup_remote_docker
-      - run: docker build -f build/Containerfile.api -t carbonaut-api .
-      - run: docker tag carbonaut-api ghcr.io/carbonaut-cloud/carbonaut-api:latest
-      - run: docker push ghcr.io/carbonaut-cloud/carbonaut:api-latest
+      - run: make build-and-push
 
 workflows:
   integration:

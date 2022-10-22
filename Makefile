@@ -69,17 +69,7 @@ run-api-server-with-fake:
 	go run cmd/api/main.go -fake-data -port 50051
 
 #
-# Container Image
-#
-
-build-container-images:
-	docker build -f build/Containerfile.api -t carbonaut-api .
-
-tag-container-images:
-	docker tag carbonaut-api ghcr.io/carbonaut-cloud/carbonaut-api:latest
-
-push-container-images:
-	docker push ghcr.io/carbonaut-cloud/carbonaut-api:latest
-
-build-agent:
-	docker build -f build/Containerfile.agent -t carbonaut-agent .
+# DEPLOY CONTAINER IMAGE
+build-and-push:
+	./hack/push-and-deploy.sh agent
+	./hack/push-and-deploy.sh api
