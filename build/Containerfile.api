@@ -8,13 +8,13 @@ RUN apt install -y protobuf-compiler
 
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-RUN wget https://github.com/grpc/grpc-web/releases/download/1.4.1/protoc-gen-grpc-web-1.4.1-linux-aarch64 -O protoc-gen-grpc-web
+RUN wget https://github.com/grpc/grpc-web/releases/download/1.4.1/protoc-gen-grpc-web-1.4.1-linux-x86_64 -O protoc-gen-grpc-web
 RUN chmod +x protoc-gen-grpc-web
 RUN mv protoc-gen-grpc-web /bin/
 
 COPY . /api/
 
-RUN ["/bin/bash -c 'make install'"]
+RUN make install
 
 RUN CGO_ENABLED=0 go build -o /go/bin/api/ ./cmd/api/main.go
 
