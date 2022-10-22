@@ -75,7 +75,7 @@ jobs:
     steps:
       - pre-run
       - setup_remote_docker
-      - run: uname -a
+      - run: echo $CONTAINER_REGISTRY_TOKEN | docker login $CONTAINER_REGISTRY -u $CONTAINER_REGISTRY_USERNAME --password-stdin
       - run: make build-and-push
 
 workflows:
