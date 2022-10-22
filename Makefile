@@ -13,17 +13,17 @@ check-ts: check-ts-lint
 
 # GO check's
 check-go-build:
-	./hack/check-go-build.sh
+	./hack/check-go-build.bash
 
 check-go-lint:
-	./hack/check-go-lint.sh
+	./hack/check-go-lint.bash
 
 check-go-test-unit:
-	./hack/check-go-test.sh
+	./hack/check-go-test.bash
 
 check-go-mod:
 	go vet ./...
-	go mod tidy -compat=1.18
+	go mod tidy -compat=1.19
 
 # TYPESCRIPT check's
 check-ts-lint:
@@ -47,7 +47,7 @@ install-go:
 	go get ./...
 
 compile-grpc:
-	./hack/compile-grpc.sh
+	./hack/compile-grpc.bash
 
 #
 # Commands for development
@@ -62,5 +62,5 @@ run-api-server-with-fake:
 #
 # DEPLOY CONTAINER IMAGE
 build-and-push:
-	./hack/push-and-deploy.sh agent
-	./hack/push-and-deploy.sh api
+	./hack/push-and-deploy.bash agent
+	./hack/push-and-deploy.bash api
