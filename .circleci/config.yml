@@ -69,11 +69,13 @@ jobs:
       - run: go test -v $(go list ./... | circleci tests split --split-by=timings)
 
   build-and-push:
+    shell: /bin/bash
     docker:
       - image: cimg/deploy:2022.09
     steps:
       - pre-run
       - setup_remote_docker
+      - run: uname -a
       - run: make build-and-push
 
 workflows:
