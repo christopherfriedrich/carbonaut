@@ -92,4 +92,7 @@ workflows:
       - check-ts:
           requires: [install]
       - build-and-push:
-          requires: [install]
+          requires: [check-ts, check-go-e2e, check-go]
+          filters:
+            branches: 
+              only: /^main/
