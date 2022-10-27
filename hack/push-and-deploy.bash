@@ -19,16 +19,12 @@ set -o pipefail
 REGISTRY=ghcr.io
 ORG=carbonaut-cloud
 
-_log() {
-    echo " $(date +'[%F %T]') - $1"
-}
-
 # Name of the container to build and deploy, e.g.: agent, analytics, api, ui
 CONTAINER=$1
 
-_log() ":: Build container image $ORG/$CONTAINER ::"
+echo " $(date +'[%F %T]') - :: Build container image $ORG/$CONTAINER ::"
 SHORTHASH="$(git rev-parse --short HEAD)"
 docker build -f build/Containerfile.$CONTAINER -t $REGISTRY/$ORG/carbonaut-$CONTAINER:latest -t $REGISTRY/$ORG/carbonaut-$CONTAINER:$SHORTHASH .
-_log() ":: Push container image $REGISTRY/$ORG/carbonaut-$CONTAINER:latest:$SHORTHASH to $REGISTRY ::"
+echo " $(date +'[%F %T]') - :: Push container image $REGISTRY/$ORG/carbonaut-$CONTAINER:latest:$SHORTHASH to $REGISTRY ::"
 docker push $REGISTRY/$ORG/carbonaut-$CONTAINER:latest
 docker push $REGISTRY/$ORG/carbonaut-$CONTAINER:$SHORTHASH

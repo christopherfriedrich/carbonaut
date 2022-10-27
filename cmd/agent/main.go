@@ -18,21 +18,17 @@ import (
 )
 
 func main() {
-
 	var cfg config.Config
-
 	a, err := agent.New(cfg)
-
 	if err != nil {
-		log.Err(fmt.Errorf("error creating agent: %s", err)).Send()
+		log.Err(fmt.Errorf("error creating agent: %w", err)).Send()
 		os.Exit(1)
 	}
 
 	if err = a.Run(); err != nil {
-		log.Err(fmt.Errorf("error starting agent: %s", err)).Send()
+		log.Err(fmt.Errorf("error starting agent: %w", err)).Send()
 		os.Exit(1)
 	}
 
 	// TODO: implement graceful shutdown
-
 }

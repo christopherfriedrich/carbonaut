@@ -13,7 +13,7 @@ set -o errexit
 # Use the error status of the first failure, rather than that of the last item in a pipeline.
 set -o pipefail
 
-VERSION=v1.50.0
+VERSION=v1.49.0
 URL_BASE=https://raw.githubusercontent.com/golangci/golangci-lint
 URL=$URL_BASE/$VERSION/install.sh
 

@@ -45,17 +45,17 @@ func SendHTTPRequest(req *HTTPReqWrapper) (*HTTPReqInfo, error) {
 	log.Debug().Msgf("Prepare sending http request config: %v", req)
 	v, err := query.Values(req.QueryStruct)
 	if err != nil {
-		return nil, fmt.Errorf("unable to encode query params: %v", err)
+		return nil, fmt.Errorf("unable to encode query params: %w", err)
 	}
 	url := fmt.Sprintf("%s%s?%s", req.BaseURL, req.Path, v.Encode())
 	log.Debug().Msgf("URL: %s", url)
 	requestBodyBytes, err := json.Marshal(&req)
 	if err != nil {
-		return nil, fmt.Errorf("unable to marshal request body: %v: %v", req, err)
+		return nil, fmt.Errorf("unable to marshal request body: %v: %w", req, err)
 	}
 	request, err := http.NewRequest(req.Method, url, bytes.NewBuffer(requestBodyBytes))
 	if err != nil {
-		return nil, fmt.Errorf("unable to create new %s request: %v", req.Method, err)
+		return nil, fmt.Errorf("unable to create new %s request: %w", req.Method, err)
 	}
 	for k := range req.Headers {
 		request.Header.Set(k, req.Headers[k])
@@ -63,12 +63,12 @@ func SendHTTPRequest(req *HTTPReqWrapper) (*HTTPReqInfo, error) {
 	client := &http.Client{}
 	resp, err := client.Do(request)
 	if err != nil {
-		return nil, fmt.Errorf("unable to perform %s request: %v", req.Method, err)
+		return nil, fmt.Errorf("unable to perform %s request: %w", req.Method, err)
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("unable to read response body: %v", err)
+		return nil, fmt.Errorf("unable to read response body: %w", err)
 	}
 	log.Debug().Msgf("received StatusCode: %d with body length %d", resp.StatusCode, len(body))
 	return &HTTPReqInfo{body, resp.StatusCode}, nil

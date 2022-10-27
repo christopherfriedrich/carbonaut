@@ -10,6 +10,7 @@ package agent
 import (
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/carbonaut/pkg/agent/config"
 	"github.com/carbonaut/pkg/agent/targets/aws"
@@ -17,17 +18,22 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+const (
+	ServerReadTimeout  = 10 * time.Second
+	ServerWriteTimeout = 10 * time.Second
+)
+
 type Agent struct {
 	registry *prometheus.Registry
 	config   *config.Config
 }
 
-func New(config config.Config) (*Agent, error) {
+func New(cfg config.Config) (*Agent, error) {
 	reg := prometheus.NewRegistry()
 
 	return &Agent{
 		registry: reg,
-		config:   &config,
+		config:   &cfg,
 	}, nil
 }
 
@@ -35,8 +41,12 @@ func (a *Agent) Run() error {
 	aws.NewTarget(nil, a.registry)
 
 	http.Handle("/metrics", promhttp.HandlerFor(a.registry, promhttp.HandlerOpts{Registry: a.registry}))
-
-	return http.ListenAndServe(":2222", nil)
+	s := &http.Server{
+		Addr:         ":2222",
+		ReadTimeout:  ServerReadTimeout,
+		WriteTimeout: ServerWriteTimeout,
+	}
+	return s.ListenAndServe()
 }
 
 func (a *Agent) Shutdown() {

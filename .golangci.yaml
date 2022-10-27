@@ -13,7 +13,6 @@ linters:
   enable:
     - asciicheck
     - bodyclose
-    - deadcode
     - depguard
     - dogsled
     - dupl
@@ -43,17 +42,52 @@ linters:
     - predeclared
     - promlinter
     - revive
-    - rowserrcheck
-    - sqlclosecheck
+    # - rowserrcheck # no go generics support
+    # - sqlclosecheck # no go generics support
     - staticcheck
-    - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unparam
     - unused
-    - varcheck
     - whitespace
+
+
+    - asasalint
+    - bidichk
+    - containedctx
+    - contextcheck
+    - cyclop
+    - decorder
+    - errchkjson
+    - errname
+    - errorlint
+    - exhaustive
+    - exportloopref
+    - forbidigo
+    - forcetypeassert
+    - funlen
+    - gochecknoinits
+    - gocognit
+    - grouper
+    - interfacebloat
+    - ireturn
+    - maintidx
+    - nestif
+    - nilerr
+    - nilnil
+    - nonamedreturns
+    - nosprintfhostport
+    - paralleltest
+    - reassign
+    - rowserrcheck
+    - sqlclosecheck
+    - tenv
+    - testpackage
+    - thelper
+    - tparallel
+    - usestdlibvars
+    - wastedassign
 linters-settings:
   godox:
     keywords:
@@ -145,4 +179,3 @@ linters-settings:
     require-explanation: false
     # Enable to require nolint directives to mention the specific linter being suppressed. Default is false.
     require-specific: true
-

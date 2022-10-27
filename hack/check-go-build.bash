@@ -14,7 +14,7 @@ set -o errexit
 set -o pipefail
 
 # This is the concurrency limit
-MAX_POOL_SIZE=5
+MAX_POOL_SIZE=3
 # This is used within the program. Do not change.
 CURRENT_POOL_SIZE=0
 
@@ -41,7 +41,8 @@ for PLATFORM in "${PLATFORMS[@]}"; do
         CURRENT_POOL_SIZE=$(jobs | wc -l)
     done
     echo " $(date +'[%F %T]') - Build on platform $PLATFORM"
-    GOARCH="$ARCH" GOOS="$OS" go build ./...
+    GOARCH="$ARCH" GOOS="$OS" go build ./... &
+    CURRENT_POOL_SIZE=$(jobs | wc -l)
 done
 
 # wait for all background jobs (forks) to exit before exiting the parent process
