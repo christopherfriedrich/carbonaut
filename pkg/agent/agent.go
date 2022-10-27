@@ -9,6 +9,7 @@ package agent
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/carbonaut/pkg/agent/config"
 	"github.com/carbonaut/pkg/agent/targets/aws"
@@ -17,21 +18,27 @@ import (
 )
 
 type Agent struct {
-	Registry *prometheus.Registry
+	registry *prometheus.Registry
+	config   *config.Config
 }
 
 func New(config config.Config) (*Agent, error) {
 	reg := prometheus.NewRegistry()
 
 	return &Agent{
-		Registry: reg,
+		registry: reg,
+		config:   &config,
 	}, nil
 }
 
 func (a *Agent) Run() error {
-	aws.NewTarget(nil, a.Registry)
+	aws.NewTarget(nil, a.registry)
 
-	http.Handle("/metrics", promhttp.HandlerFor(a.Registry, promhttp.HandlerOpts{Registry: a.Registry}))
+	http.Handle("/metrics", promhttp.HandlerFor(a.registry, promhttp.HandlerOpts{Registry: a.registry}))
 
 	return http.ListenAndServe(":2222", nil)
+}
+
+func (a *Agent) Shutdown() {
+	os.Exit(1)
 }
