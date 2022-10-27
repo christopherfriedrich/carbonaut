@@ -6,12 +6,12 @@ Permission is granted to use, copy, modify, and redistribute the work.
 Full license information available in the project LICENSE file.
 */
 
-package utils
+package env
 
 import "os"
 
-// EnvDefault returns either the provided environment variable for the given key or the default value def if not set.
-func EnvDefault(key, def string) string {
+// Default returns either the provided environment variable for the given key or the default value def if not set.
+func Default(key, def string) string {
 	value, ok := os.LookupEnv(key)
 	if !ok || value == "" {
 		return def
@@ -19,8 +19,8 @@ func EnvDefault(key, def string) string {
 	return value
 }
 
-// EnvIsSet returns true if an environment variable is set.
-func EnvIsSet(key string) bool {
+// IsSet returns true if an environment variable is set.
+func IsSet(key string) bool {
 	_, ok := os.LookupEnv(key)
 	return ok
 }
