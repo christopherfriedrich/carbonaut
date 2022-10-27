@@ -12,6 +12,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -20,7 +21,6 @@ import (
 	"github.com/carbonaut/pkg/agent/scrapeconfig"
 	"github.com/carbonaut/pkg/api/model"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/push"
 	"github.com/rs/zerolog/log"
 )
 
@@ -28,7 +28,7 @@ type Target struct {
 }
 
 // NewTarget creates a AWS target
-func NewTarget(scrapeconfig *scrapeconfig.AWSTargetConfig) {
+func NewTarget(scrapeconfig *scrapeconfig.AWSTargetConfig, reg *prometheus.Registry) {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
 		log.Err(fmt.Errorf("failed to retrieve configuration for aws connection: %v", err))
@@ -37,52 +37,21 @@ func NewTarget(scrapeconfig *scrapeconfig.AWSTargetConfig) {
 	ec2Instances := retrieveEc2Instances(&cfg)
 	numberOfEc2InstancesPerType := numberOfEc2InstancesPerType(&ec2Instances)
 
-	ec2InstanceGauge := prometheus.NewGauge(prometheus.GaugeOpts{
+	ec2InstanceGauge := prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: "aws",
 		Name:      "no_of_ec2_instances",
-	})
+	}, []string{"region", "instance_type"})
+	reg.MustRegister(ec2InstanceGauge)
 
-	// client := promwrite.NewClient("http://localhost:8080/api/v1/push")
-
-	// currentTime := time.Now()
-	for instanceType, noOfEc2Instances := range numberOfEc2InstancesPerType {
-		ec2InstanceGauge.Set(float64(noOfEc2Instances))
-		// _, err := client.Write(context.Background(), &promwrite.WriteRequest{
-		// 	TimeSeries: []promwrite.TimeSeries{
-		// 		{
-		// 			Labels: []promwrite.Label{
-		// 				{
-		// 					Name:  "__name__",
-		// 					Value: "aws_no_of_ec2_instances",
-		// 				},
-		// 				{
-		// 					Name:  "region",
-		// 					Value: cfg.Region,
-		// 				},
-		// 				{
-		// 					Name:  "instance_type",
-		// 					Value: toPrometheusLabel(instanceType),
-		// 				},
-		// 			},
-		// 			Sample: promwrite.Sample{
-		// 				Time:  currentTime,
-		// 				Value: float64(noOfEc2Instances),
-		// 			},
-		// 		},
-		// 	},
-		// }, promwrite.WriteHeaders(map[string]string{
-		// 	"X-Scope-OrgID": "Main Org.",
-		// }))
-		// if err != nil {
-		// 	log.Err(err).Send()
-		// 	return
-		// }
-		if err := push.New("localhost:8080", "carbonaut_agent").Collector(ec2InstanceGauge).Grouping("region", cfg.Region).Grouping("instance_type", toPrometheusLabel(instanceType)).Add(); err != nil {
-			log.Err(err).Send()
+	go func() {
+		for {
+			for instanceType, noOfEc2Instances := range numberOfEc2InstancesPerType {
+				ec2InstanceGauge.WithLabelValues(cfg.Region, toPrometheusLabel(instanceType)).Set(float64(noOfEc2Instances))
+				time.Sleep(3 * time.Second)
+			}
 		}
-	}
+	}()
 
-	fmt.Printf("%#v", numberOfEc2InstancesPerType)
 }
 
 func toPrometheusLabel(strg string) string {
@@ -117,7 +86,6 @@ func RetrieveAWSRegions(cfg *aws.Config) *[]string {
 }
 
 // gauge number of ec2 instances
-
 func retrieveEc2Instances(cfg *aws.Config) map[*model.ITResource]string {
 	resources := make(map[*model.ITResource]string, 0)
 	svc := ec2.NewFromConfig(*cfg)
