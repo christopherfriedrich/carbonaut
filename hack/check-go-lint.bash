@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2022 CARBONAUT AUTHOR
+# Copyright (c) 2022 CARBONAUT AUTHORS
 #
 # Licensed under the MIT license: https://opensource.org/licenses/MIT
 # Permission is granted to use, copy, modify, and redistribute the work.
@@ -18,7 +18,7 @@ URL_BASE=https://raw.githubusercontent.com/golangci/golangci-lint
 URL=$URL_BASE/$VERSION/install.sh
 
 if [[ ! -f .golangci.yaml ]]; then
-    echo 'ERROR: missing .golangci.yaml in repo root' >&2
+    echo " $(date +'[%F %T]') - ERROR: missing .golangci.yaml in repo root" >&2
     exit 1
 fi
 
