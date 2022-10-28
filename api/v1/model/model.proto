@@ -24,6 +24,13 @@ enum EMISSION_FORMULA {
 //   SCOPE_3 = 3;
 // }
 
+enum PROVIDER {
+    AWS = 0;
+    GCP = 1;
+    AZURE = 2;
+    SELF_HOSTED = 3;
+}
+
 message CarbonRecord {
     float carbon_footprint_kgCO2e = 1;
     EMISSION_FORMULA formula = 2;
@@ -45,7 +52,11 @@ message Emission {
     // Carbon footprint caused by location
     CarbonRecord carbon_footprint_estimation_location_average = 6;
 }
-  
+
+message Provider {
+    PROVIDER cloud_provider = 1;
+    repeated string account_numbers = 2;
+}
 
 // GEO Location of a resource
 message Location {
@@ -58,7 +69,7 @@ message Location {
     // coordinates
     string latitude = 4;
     // coordinates
-    string longitude = 5; 
+    string longitude = 5;
 }
 
 

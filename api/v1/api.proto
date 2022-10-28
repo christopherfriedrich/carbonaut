@@ -17,8 +17,86 @@ service EmissionData {
 
   // rpc ListEnergyDataForITResource (ListEnergyDataForITResourceRequest) returns (ListEnergyDataForITResourceResponse) {}
 
+  rpc ListFootprint (ListFootprintForProjectRequest) returns (ListFootprintForProjectResponse) {}
+  rpc GetEmission (GetEmissionForProjectRequest) returns (GetEmissionsForProjectResponse) {}
+  rpc ListServices (ListServicesForProjectRequest) returns (ListServicesForProjectResponse) {}
+  rpc ListProviderAccounts (ListProviderAccountsRequest) returns (ListProviderAccountsResponse) {}
+  rpc ListProviders (ListProvidersRequest) returns (ListProvidersResponse) {}
+
   rpc ListITResourcesForProject (ListITResourcesForProjectRequest) returns (ListITResourcesForProjectResponse) {}
 }
+
+// List Configured Providers
+message ListProvidersRequest {}
+
+message ListProvidersResponse {
+  repeated carbonaut.api.v1.model.PROVIDER configured_providers = 1;
+}
+
+// List Accounts
+message ListProviderAccountsRequest {}
+
+message ListProviderAccountsResponse {
+  // List of accounts that are used in the provider
+  repeated carbonaut.api.v1.model.Provider provider = 1;
+  // Request status information
+  carbonaut.api.v1.util.Status status = 2;
+}
+
+// List Services
+message ListServicesForProjectRequest {}
+
+message ListServicesForProjectResponse {
+  // List of services that are used
+  repeated string services = 1;
+  // Request status information
+  carbonaut.api.v1.util.Status status = 2;
+}
+// List Emissions
+message GetEmissionForProjectRequest {
+  // Usage time
+  carbonaut.api.v1.util.UsageTime recorded_time_span = 1;
+  // Accounts that are used
+  carbonaut.api.v1.model.Provider provider = 2;
+  // Service of the cloud provider
+  carbonaut.api.v1.model.Location location = 3;
+  // The maximum number of items to return.
+  int32 page_size = 4;
+  // The next_page_token value returned from a previous List request, if any.
+  string page_token = 5;
+}
+
+message GetEmissionsForProjectResponse {
+  // Information regarding emissions of the User includes(projects and all services)
+  carbonaut.api.v1.model.Emission emission = 1;
+  // Request status information
+  carbonaut.api.v1.util.Status status = 2;
+}
+
+// List Footprint
+message ListFootprintForProjectRequest {
+  carbonaut.api.v1.util.UsageTime recorded_time_span = 1;
+  // Accounts that are used
+  carbonaut.api.v1.model.Provider provider = 2;
+  // Service of the cloud provider
+  carbonaut.api.v1.model.Location location = 3;
+  // To query by day, month and year
+  string groupBy = 4;
+  // The maximum number of items to return.
+  int32 page_size = 5;
+  // The next_page_token value returned from a previous List request, if any.
+  string page_token = 6;
+}
+
+message ListFootprintForProjectResponse {
+  // Carbon footprint data of the project by given dates
+  repeated carbonaut.api.v1.model.Emission emissions = 1;
+  // more results in the list.
+  string next_page_token = 2;
+  // Request status information
+  carbonaut.api.v1.util.Status status = 3;
+}
+
 
 // List IT Resources
 message ListITResourcesForProjectRequest {
