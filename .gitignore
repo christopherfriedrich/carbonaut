@@ -60,6 +60,3 @@ pkg/api/*.go
 pkg/api/*/*.go
 
 ui/packages/api/dist/*
-
-
-secret.yaml

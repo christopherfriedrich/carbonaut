@@ -24,7 +24,6 @@ To get the things started localy you need a K8s like [kind](https://kind.sigs.k8
 Next, get Mimir & Grafana started. 
 ```
 kubectl create namespace carbonaut
-kubectl create namespace mimir
 helm upgrade carbonaut ./deployment --namespace carbonaut -i
 ```
 
