@@ -15,3 +15,7 @@ dependencies:
     alias: grafana
     version: 6.40.05
     repository: https://grafana.github.io/helm-charts
+  - name: redis
+    alias: redis
+    version: 17.3.7
+    repository: https://charts.bitnami.com/bitnami

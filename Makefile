@@ -59,7 +59,6 @@ upgrade-go:
 run-api-server-with-fake:
 	go run cmd/api/main.go -fake-data -port 50051
 
-#
 # DEPLOY CONTAINER IMAGE
 build-and-push:
 	./hack/push-and-deploy.bash agent
