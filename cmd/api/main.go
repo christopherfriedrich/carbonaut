@@ -55,31 +55,57 @@ type server struct {
 	api.UnimplementedEmissionDataServer
 }
 
+var (
+	itResourceA = model.ITResource{
+		ServiceName: "aws_ec2",
+		ProjectId:   "1212121212",
+		Location:    &model.Location{Country: "Germany", Region: "eu-west-1", Area: "eu-west-1a"},
+		HardwareComponents: []*model.ITResourceComponent{{
+			NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_CPU,
+			ModelName:               "Intel CPU i7",
+			CountOfTheComponentUsed: 1,
+		}, {
+			NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_HardDisk,
+			ModelName:               "Samsung Drive",
+			CountOfTheComponentUsed: 2,
+		}, {
+			NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_RAM,
+			ModelName:               "DDR5 RAM 8GB",
+			CountOfTheComponentUsed: 8,
+		}, {
+			NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_PowerSupply,
+			ModelName:               "POWERMAN SUPPLY A",
+			CountOfTheComponentUsed: 1,
+		}},
+	}
+	itResourceB = model.ITResource{
+		ServiceName: "aws_ec2",
+		ProjectId:   "1212121213",
+		Location:    &model.Location{Country: "Germany", Region: "eu-west-1", Area: "eu-west-1a"},
+		HardwareComponents: []*model.ITResourceComponent{{
+			NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_CPU,
+			ModelName:               "Intel CPU i7",
+			CountOfTheComponentUsed: 1,
+		}, {
+			NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_HardDisk,
+			ModelName:               "Samsung Drive",
+			CountOfTheComponentUsed: 4,
+		}, {
+			NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_RAM,
+			ModelName:               "DDR5 RAM 8GB",
+			CountOfTheComponentUsed: 16,
+		}, {
+			NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_PowerSupply,
+			ModelName:               "POWERMAN SUPPLY B",
+			CountOfTheComponentUsed: 1,
+		}},
+	}
+)
+
 func (s *server) ListEmissionsForITResource(ctx context.Context, in *api.ListEmissionsForITResourceRequest) (*api.ListEmissionsForITResourceResponse, error) {
 	return &api.ListEmissionsForITResourceResponse{
 		EmissionData: []*model.Emission{{
-			ItResource: &model.ITResource{
-				ServiceName: "aws_ec2",
-				ProjectId:   "1212121212",
-				Location:    &model.Location{Country: "Germany", Region: "eu-west-1", Area: "eu-west-1a"},
-				HardwareComponents: []*model.ITResourceComponent{{
-					NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_CPU,
-					ModelName:               "Intel CPU i7",
-					CountOfTheComponentUsed: 1,
-				}, {
-					NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_HardDisk,
-					ModelName:               "Samsung Drive",
-					CountOfTheComponentUsed: 2,
-				}, {
-					NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_RAM,
-					ModelName:               "DDR5 RAM 8GB",
-					CountOfTheComponentUsed: 8,
-				}, {
-					NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_PowerSupply,
-					ModelName:               "POWERMAN SUPPLY A",
-					CountOfTheComponentUsed: 1,
-				}},
-			},
+			ItResource: &itResourceA,
 			RecordedTimeSpan: &util.UsageTime{
 				UsageStart: &timestamppb.Timestamp{},
 				UsageEnd:   &timestamppb.Timestamp{},
@@ -100,28 +126,7 @@ func (s *server) ListEmissionsForITResource(ctx context.Context, in *api.ListEmi
 				EstimationOffset:      0.00000001,
 			},
 		}, {
-			ItResource: &model.ITResource{
-				ServiceName: "aws_ec2",
-				ProjectId:   "1212121213",
-				Location:    &model.Location{Country: "Germany", Region: "eu-west-1", Area: "eu-west-1a"},
-				HardwareComponents: []*model.ITResourceComponent{{
-					NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_CPU,
-					ModelName:               "Intel CPU i7",
-					CountOfTheComponentUsed: 1,
-				}, {
-					NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_HardDisk,
-					ModelName:               "Samsung Drive",
-					CountOfTheComponentUsed: 4,
-				}, {
-					NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_RAM,
-					ModelName:               "DDR5 RAM 8GB",
-					CountOfTheComponentUsed: 16,
-				}, {
-					NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_PowerSupply,
-					ModelName:               "POWERMAN SUPPLY B",
-					CountOfTheComponentUsed: 1,
-				}},
-			},
+			ItResource: &itResourceB,
 			RecordedTimeSpan: &util.UsageTime{
 				UsageStart: &timestamppb.Timestamp{},
 				UsageEnd:   &timestamppb.Timestamp{},
@@ -152,49 +157,7 @@ func (s *server) ListEmissionsForITResource(ctx context.Context, in *api.ListEmi
 
 func (s *server) ListITResourcesForProject(ctx context.Context, in *api.ListITResourcesForProjectRequest) (*api.ListITResourcesForProjectResponse, error) {
 	return &api.ListITResourcesForProjectResponse{
-		ItResources: []*model.ITResource{{
-			ServiceName: "aws_ec2",
-			ProjectId:   "1212121212",
-			Location:    &model.Location{Country: "Germany", Region: "eu-west-1", Area: "eu-west-1a"},
-			HardwareComponents: []*model.ITResourceComponent{{
-				NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_CPU,
-				ModelName:               "Intel CPU i7",
-				CountOfTheComponentUsed: 1,
-			}, {
-				NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_HardDisk,
-				ModelName:               "Samsung Drive",
-				CountOfTheComponentUsed: 2,
-			}, {
-				NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_RAM,
-				ModelName:               "DDR5 RAM 8GB",
-				CountOfTheComponentUsed: 8,
-			}, {
-				NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_PowerSupply,
-				ModelName:               "POWERMAN SUPPLY A",
-				CountOfTheComponentUsed: 1,
-			}},
-		}, {
-			ServiceName: "aws_ec2",
-			ProjectId:   "1212121213",
-			Location:    &model.Location{Country: "Germany", Region: "eu-west-1", Area: "eu-west-1a"},
-			HardwareComponents: []*model.ITResourceComponent{{
-				NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_CPU,
-				ModelName:               "Intel CPU i7",
-				CountOfTheComponentUsed: 1,
-			}, {
-				NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_HardDisk,
-				ModelName:               "Samsung Drive",
-				CountOfTheComponentUsed: 4,
-			}, {
-				NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_RAM,
-				ModelName:               "DDR5 RAM 8GB",
-				CountOfTheComponentUsed: 16,
-			}, {
-				NameCategory:            model.IT_RESOURCE_COMPONENT_CATEGORIES_PowerSupply,
-				ModelName:               "POWERMAN SUPPLY B",
-				CountOfTheComponentUsed: 1,
-			}},
-		}},
+		ItResources:   []*model.ITResource{&itResourceA, &itResourceB},
 		NextPageToken: "",
 		Status: &util.Status{
 			Code:    util.Code_OK,

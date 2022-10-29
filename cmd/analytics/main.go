@@ -8,8 +8,10 @@ Full license information available in the project LICENSE file.
 
 package main
 
-import "fmt"
+import (
+	"github.com/rs/zerolog/log"
+)
 
 func main() {
-	fmt.Println("analytics is not implemented yet!")
+	log.Warn().Msg("analytics is not implemented yet!")
 }
