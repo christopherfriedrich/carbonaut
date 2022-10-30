@@ -28,19 +28,25 @@ var _ = Describe("Rnd", func() {
 		Context("RndNumber Tests", func() {
 			Context("A null range", func() {
 				It("should return null", func() {
-					Expect(rnd.RndNumber(0, 0)).To(Equal(0))
+					Expect(rnd.GetNumber(0, 0)).To(Equal(0))
 				})
 			})
 
 			Context("With min greater than max", func() {
 				It("should return -1", func() {
-					Expect(rnd.RndNumber(1, 0)).To(Equal(-1))
+					Expect(rnd.GetNumber(1, 0)).To(Equal(-1))
 				})
 			})
 
-			Context("With max greater than min", func() {
-				It("should return a valid", func() {
-					Expect(rnd.RndNumber(0, 1)).To(Or(Equal(0), Equal(1)))
+			Context("With max '1' greater than min '0'", func() {
+				It("should return '0' or '1'", func() {
+					Expect(rnd.GetNumber(0, 1)).To(Or(Equal(0), Equal(1)))
+				})
+			})
+
+			Context("With max '3' greater than min '1'", func() {
+				It("should return '1', '2' or '3'", func() {
+					Expect(rnd.GetNumber(1, 3)).To(Or(Equal(1), Equal(2), Equal(3)))
 				})
 			})
 		})

@@ -131,7 +131,7 @@ var _ = Describe("Carbonaware", func() {
 	Context("GetEmissionsAverageCarbonIntensity", func() {
 		Context("valid configuration", func() {
 			resp, err := sdk.GetEmissionsAverageCarbonIntensity(&sdk.GetEmissionsAverageCarbonIntensityRequest{
-				Location:  ValidLocations[rnd.RndNumber(0, len(ValidLocations))],
+				Location:  ValidLocations[rnd.GetNumber(0, len(ValidLocations))],
 				StartTime: time,
 				EndTime:   toTime,
 			})
@@ -149,11 +149,11 @@ var _ = Describe("Carbonaware", func() {
 		Context("valid configuration", func() {
 			resp, err := sdk.PostEmissionsAverageCarbonIntensityBatch(&sdk.PostEmissionsAverageCarbonIntensityBatchRequest{
 				{
-					Location:  ValidLocations[rnd.RndNumber(0, len(ValidLocations))],
+					Location:  ValidLocations[rnd.GetNumber(0, len(ValidLocations))],
 					StartTime: time,
 					EndTime:   toTime,
 				}, {
-					Location:  ValidLocations[rnd.RndNumber(0, len(ValidLocations))],
+					Location:  ValidLocations[rnd.GetNumber(0, len(ValidLocations))],
 					StartTime: time,
 					EndTime:   toTime,
 				},
