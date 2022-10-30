@@ -1,0 +1,17 @@
+version: carbonaut-agent/v0.1
+type: aws
+name: aws-1
+port: 2222
+spec:
+  auth: "1"
+  regions:
+    - "eu-west-1"    
+---
+version: carbonaut-agent/v0.1
+type: gcp
+name: gcp-1
+port: 2221
+spec:
+  auth: "2"
+  locations:
+    - "eu"    

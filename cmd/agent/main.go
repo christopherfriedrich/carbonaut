@@ -9,26 +9,43 @@ Full license information available in the project LICENSE file.
 package main
 
 import (
-	"fmt"
-	"os"
+	"time"
 
 	"github.com/carbonaut/pkg/agent"
-	"github.com/carbonaut/pkg/agent/config"
 	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	var cfg config.Config
-	a, err := agent.New(cfg)
-	if err != nil {
-		log.Err(fmt.Errorf("error creating agent: %w", err)).Send()
-		os.Exit(1)
+	commsChan := make(chan agent.CommsChannel)
+	go func() {
+		if err := agent.Run(commsChan); err != nil {
+			log.Error().Err(err)
+			return
+		}
+	}()
+	// example... remove later
+	time.Sleep(3 * time.Second)
+	commsChan <- agent.CommsChannel{
+		Action:  agent.ActionStop,
+		Name:    "aws-1",
+		Details: "testing stop aws",
 	}
-
-	if err = a.Run(); err != nil {
-		log.Err(fmt.Errorf("error starting agent: %w", err)).Send()
-		os.Exit(1)
+	time.Sleep(3 * time.Second)
+	commsChan <- agent.CommsChannel{
+		Action:  agent.ActionStop,
+		Name:    "gcp-1",
+		Details: "testing stop gcp",
 	}
-
-	// TODO: implement graceful shutdown
+	time.Sleep(3 * time.Second)
+	commsChan <- agent.CommsChannel{
+		Action:  agent.ActionStart,
+		Name:    "aws-1",
+		Details: "testing re-starting aws",
+	}
+	time.Sleep(1 * time.Second)
+	commsChan <- agent.CommsChannel{
+		Action:  agent.ActionStopAgent,
+		Details: "testing shutting down all",
+	}
+	time.Sleep(1 * time.Second)
 }

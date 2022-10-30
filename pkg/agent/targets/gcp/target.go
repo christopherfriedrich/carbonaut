@@ -6,7 +6,7 @@ Permission is granted to use, copy, modify, and redistribute the work.
 Full license information available in the project LICENSE file.
 */
 
-package carbonaware
+package gcp
 
 import (
 	"fmt"
@@ -17,7 +17,8 @@ import (
 )
 
 type Spec struct {
-	Auth string `yaml:"auth"`
+	Auth      string   `yaml:"auth"`
+	Locations []string `yaml:"locations"`
 }
 
 type Target struct{}
@@ -25,10 +26,10 @@ type Target struct{}
 func (Target) Register(a any, promRegistry *prometheus.Registry) error {
 	targetSpec, ok := a.(Spec)
 	if !ok {
-		return fmt.Errorf("unable to decode config as carbonaware spec: %v", a)
+		return fmt.Errorf("unable to decode config as gcp spec: %v", a)
 	}
 
-	log.Info().Msgf("run carbonaware target auth:[%s]", targetSpec.Auth)
+	log.Info().Msgf("run gcp target, locations:[%v]", targetSpec.Locations)
 	return fmt.Errorf("not implemented yet")
 }
 
@@ -41,5 +42,5 @@ func (Target) UnmarshalSpec(b []byte) (any, error) {
 }
 
 func (Target) GetTargetType() string {
-	return "carbonaware"
+	return "gcp"
 }

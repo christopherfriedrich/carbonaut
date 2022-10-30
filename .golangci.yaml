@@ -78,7 +78,6 @@ linters:
     - nilnil
     - nonamedreturns
     - nosprintfhostport
-    - paralleltest
     - reassign
     - rowserrcheck
     - sqlclosecheck
