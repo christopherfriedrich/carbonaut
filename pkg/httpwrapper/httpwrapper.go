@@ -49,7 +49,7 @@ func SendHTTPRequest(req *HTTPReqWrapper) (*HTTPReqInfo, error) {
 	}
 	url := fmt.Sprintf("%s%s?%s", req.BaseURL, req.Path, v.Encode())
 	log.Debug().Msgf("URL: %s", url)
-	requestBodyBytes, err := json.Marshal(&req)
+	requestBodyBytes, err := json.Marshal(&req.BodyStruct)
 	if err != nil {
 		return nil, fmt.Errorf("unable to marshal request body: %v: %w", req, err)
 	}

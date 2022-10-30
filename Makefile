@@ -4,7 +4,7 @@
 # Permission is granted to use, copy, modify, and redistribute the work.
 # Full license information available in the project LICENSE file.
 
-verify: check-misc check-go check-ts check-go-e2e
+verify: compile-grpc check-misc check-go check-ts check-go-e2e
 
 check-misc: check-git
 check-go: check-go-mod check-go-build check-go-lint

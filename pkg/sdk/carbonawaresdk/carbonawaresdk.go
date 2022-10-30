@@ -6,7 +6,7 @@ Permission is granted to use, copy, modify, and redistribute the work.
 Full license information available in the project LICENSE file.
 */
 
-package carbonaware
+package carbonawaresdk
 
 import (
 	"encoding/json"
@@ -14,7 +14,6 @@ import (
 	"net/http"
 
 	"github.com/carbonaut/pkg/httpwrapper"
-	"github.com/carbonaut/pkg/sdk/carbonawaresdk/model"
 )
 
 const BaseURL = "https://carbon-aware-api.azurewebsites.net"
@@ -42,7 +41,7 @@ func (h httpStatusCodes) get(target int) int {
 }
 
 // Calculate the best emission data by list of locations for a specified time period.
-func GetEmissionsByLocationsBest(payload *model.GetEmissionsByLocationsBestRequest) (*model.GetEmissionsByLocationsBestResponse, error) {
+func GetEmissionsByLocationsBest(payload *GetEmissionsByLocationsBestRequest) (*GetEmissionsByLocationsBestResponse, error) {
 	c := carbonAwareEndpoint{
 		config: httpwrapper.HTTPReqWrapper{
 			Method:      http.MethodGet,
@@ -57,11 +56,11 @@ func GetEmissionsByLocationsBest(payload *model.GetEmissionsByLocationsBestReque
 			statusCodesError:   httpStatusCodes{http.StatusBadRequest},
 		},
 	}
-	return callEndpoint(&c, model.GetEmissionsByLocationsBestResponse{})
+	return callEndpoint(&c, GetEmissionsByLocationsBestResponse{})
 }
 
 // Calculate the observed emission data by list of locations for a specified, time period.
-func GetEmissionsByLocations(req *model.GetEmissionsByLocationsRequest) (*model.GetEmissionsByLocationsResponse, error) {
+func GetEmissionsByLocations(req *GetEmissionsByLocationsRequest) (*GetEmissionsByLocationsResponse, error) {
 	c := carbonAwareEndpoint{
 		config: httpwrapper.HTTPReqWrapper{
 			Method:      http.MethodGet,
@@ -76,11 +75,11 @@ func GetEmissionsByLocations(req *model.GetEmissionsByLocationsRequest) (*model.
 			statusCodesError:   httpStatusCodes{http.StatusBadRequest},
 		},
 	}
-	return callEndpoint(&c, model.GetEmissionsByLocationsResponse{})
+	return callEndpoint(&c, GetEmissionsByLocationsResponse{})
 }
 
 // Calculate the best emission data by location for a specified time period.
-func GetEmissionsByLocation(req *model.GetEmissionsByLocationRequest) (*model.GetEmissionsByLocationResponse, error) {
+func GetEmissionsByLocation(req *GetEmissionsByLocationRequest) (*GetEmissionsByLocationResponse, error) {
 	c := carbonAwareEndpoint{
 		config: httpwrapper.HTTPReqWrapper{
 			Method:      http.MethodGet,
@@ -95,11 +94,12 @@ func GetEmissionsByLocation(req *model.GetEmissionsByLocationRequest) (*model.Ge
 			statusCodesError:   httpStatusCodes{http.StatusBadRequest},
 		},
 	}
-	return callEndpoint(&c, model.GetEmissionsByLocationResponse{})
+	return callEndpoint(&c, GetEmissionsByLocationResponse{})
 }
 
 // Retrieves the most recent forecasted data and calculates the optimal marginal carbon intensity window.
-func GetEmissionsForecastsCurrent(req *model.GetEmissionsForecastCurrentRequest) (*model.GetEmissionsForecastCurrentResponse, error) {
+// WARNING: This endpoint does currently not work well and throws an error at carbonaware api side
+func GetEmissionsForecastsCurrent(req *GetEmissionsForecastCurrentRequest) (*GetEmissionsForecastCurrentResponse, error) {
 	c := carbonAwareEndpoint{
 		config: httpwrapper.HTTPReqWrapper{
 			Method:      http.MethodGet,
@@ -113,11 +113,12 @@ func GetEmissionsForecastsCurrent(req *model.GetEmissionsForecastCurrentRequest)
 			statusCodesError: httpStatusCodes{http.StatusBadRequest, http.StatusInternalServerError, http.StatusNotImplemented},
 		},
 	}
-	return callEndpoint(&c, model.GetEmissionsForecastCurrentResponse{})
+	return callEndpoint(&c, GetEmissionsForecastCurrentResponse{})
 }
 
 // Given an array of historical forecasts, retrieves the data that contains forecasts metadata, the optimal forecast and a range of forecasts filtered by the attributes [start...end] if provided.
-func PostEmissionsForecastsBatch(req *model.PostEmissionsForecastsBatchRequest) (*model.PostEmissionsForecastsBatchResponse, error) {
+// WARNING: This endpoint does currently not work well and throws an error at carbonaware api side
+func PostEmissionsForecastsBatch(req *PostEmissionsForecastsBatchRequest) (*PostEmissionsForecastsBatchResponse, error) {
 	c := carbonAwareEndpoint{
 		config: httpwrapper.HTTPReqWrapper{
 			Method:     http.MethodPost,
@@ -131,11 +132,11 @@ func PostEmissionsForecastsBatch(req *model.PostEmissionsForecastsBatchRequest) 
 			statusCodesError: httpStatusCodes{http.StatusBadRequest, http.StatusInternalServerError, http.StatusNotImplemented},
 		},
 	}
-	return callEndpoint(&c, model.PostEmissionsForecastsBatchResponse{})
+	return callEndpoint(&c, PostEmissionsForecastsBatchResponse{})
 }
 
 // Retrieves the measured carbon intensity data between the time boundaries and calculates the average carbon intensity during that period.
-func GetEmissionsAverageCarbonIntensity(req *model.GetEmissionsAverageCarbonIntensityRequest) (*model.GetEmissionsAverageCarbonIntensityResponse, error) {
+func GetEmissionsAverageCarbonIntensity(req *GetEmissionsAverageCarbonIntensityRequest) (*GetEmissionsAverageCarbonIntensityResponse, error) {
 	c := carbonAwareEndpoint{
 		config: httpwrapper.HTTPReqWrapper{
 			Method:      http.MethodGet,
@@ -150,29 +151,28 @@ func GetEmissionsAverageCarbonIntensity(req *model.GetEmissionsAverageCarbonInte
 			statusCodesError: httpStatusCodes{http.StatusBadRequest, http.StatusInternalServerError},
 		},
 	}
-	return callEndpoint(&c, model.GetEmissionsAverageCarbonIntensityResponse{})
+	return callEndpoint(&c, GetEmissionsAverageCarbonIntensityResponse{})
 }
 
 // Given an array of request objects, each with their own location and time boundaries, calculate the average carbon intensity for that location and time period and return an array of carbon intensity objects.
-func PostEmissionsAverageCarbonIntensityBatch(req *model.PostEmissionsAverageCarbonIntensityBatchRequest) (*model.PostEmissionsAverageCarbonIntensityBatchResponse, error) {
+func PostEmissionsAverageCarbonIntensityBatch(req *PostEmissionsAverageCarbonIntensityBatchRequest) (*PostEmissionsAverageCarbonIntensityBatchResponse, error) {
 	c := carbonAwareEndpoint{
 		config: httpwrapper.HTTPReqWrapper{
-			Method:      http.MethodPost,
-			BaseURL:     BaseURL,
-			Path:        "/emissions/average-carbon-intensity/batch",
-			QueryStruct: nil,
-			BodyStruct:  req,
-			Headers:     map[string]string{"Content-Type": "application/json"},
+			Method:     http.MethodPost,
+			BaseURL:    BaseURL,
+			Path:       "/emissions/average-carbon-intensity/batch",
+			BodyStruct: req,
+			Headers:    map[string]string{"Content-Type": "application/json"},
 		},
 		definedStatusCodes: definedStatusCodePools{
 			statusCodesOK:    httpStatusCodes{http.StatusOK},
 			statusCodesError: httpStatusCodes{http.StatusBadRequest, http.StatusInternalServerError},
 		},
 	}
-	return callEndpoint(&c, model.PostEmissionsAverageCarbonIntensityBatchResponse{})
+	return callEndpoint(&c, PostEmissionsAverageCarbonIntensityBatchResponse{})
 }
 
-func callEndpoint[Resp model.CarbonAwareResponses](c *carbonAwareEndpoint, emptyResponse Resp) (*Resp, error) {
+func callEndpoint[Resp CarbonAwareResponses](c *carbonAwareEndpoint, emptyResponse Resp) (*Resp, error) {
 	resp, err := httpwrapper.SendHTTPRequest(&c.config)
 	if err != nil {
 		return nil, err
@@ -187,7 +187,7 @@ func callEndpoint[Resp model.CarbonAwareResponses](c *carbonAwareEndpoint, empty
 	case c.definedStatusCodes.statusCodesNoError.get(resp.StatusCode):
 		return &emptyResponse, nil
 	case c.definedStatusCodes.statusCodesError.get(resp.StatusCode):
-		var errResponseDetails model.ValidationProblemDetails
+		var errResponseDetails ValidationProblemDetails
 		if err := json.Unmarshal(resp.Body, &errResponseDetails); err != nil {
 			return nil, fmt.Errorf("could not decode error details from the carbonaware request: %w", err)
 		}
