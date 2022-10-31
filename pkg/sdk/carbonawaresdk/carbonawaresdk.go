@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/carbonaut/pkg/httpwrapper"
+	"github.com/carbonaut/pkg/util/httpwrapper"
 )
 
 const BaseURL = "https://carbon-aware-api.azurewebsites.net"

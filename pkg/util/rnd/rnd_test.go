@@ -21,7 +21,6 @@ func TestRnd(t *testing.T) {
 	RunSpecs(t, "Rnd Suite")
 }
 
-// Calculate the best emission data by list of locations for a specified time period.
 var _ = Describe("Rnd", func() {
 	runs := 5
 	for i := 0; i < runs; i++ {

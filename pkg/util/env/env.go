@@ -8,19 +8,23 @@ Full license information available in the project LICENSE file.
 
 package env
 
-import "os"
+import (
+	"os"
+
+	"github.com/rs/zerolog/log"
+)
 
 // Default returns either the provided environment variable for the given key or the default value def if not set.
 func Default(key, def string) string {
-	value, ok := os.LookupEnv(key)
-	if !ok || value == "" {
-		return def
+	if err := os.Setenv(key, def); err != nil {
+		return ""
 	}
-	return value
+	return def
 }
 
 // IsSet returns true if an environment variable is set.
 func IsSet(key string) bool {
-	_, ok := os.LookupEnv(key)
-	return ok
+	value := os.Getenv(key)
+	log.Logger.Info().Msgf("VAL: '%s', %v", value, value != "")
+	return value != ""
 }

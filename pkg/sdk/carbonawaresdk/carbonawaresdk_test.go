@@ -11,8 +11,8 @@ package carbonawaresdk_test
 import (
 	"testing"
 
-	"github.com/carbonaut/pkg/rnd"
 	sdk "github.com/carbonaut/pkg/sdk/carbonawaresdk"
+	"github.com/carbonaut/pkg/util/rnd"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
