@@ -14,7 +14,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/carbonaut/pkg/env"
+	"github.com/carbonaut/pkg/util/env"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

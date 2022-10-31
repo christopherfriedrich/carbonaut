@@ -11,7 +11,7 @@ package promwrapper_test
 import (
 	"testing"
 
-	"github.com/carbonaut/pkg/promwrapper"
+	"github.com/carbonaut/pkg/util/promwrapper"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

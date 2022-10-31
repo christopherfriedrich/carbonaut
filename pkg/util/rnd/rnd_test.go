@@ -11,7 +11,7 @@ package rnd_test
 import (
 	"testing"
 
-	"github.com/carbonaut/pkg/rnd"
+	"github.com/carbonaut/pkg/util/rnd"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

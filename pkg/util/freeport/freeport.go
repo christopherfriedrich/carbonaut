@@ -9,6 +9,7 @@ Full license information available in the project LICENSE file.
 package freeport
 
 import (
+	"fmt"
 	"net"
 )
 
@@ -22,5 +23,9 @@ func GetFreePort() (int, error) {
 		return 0, err
 	}
 	defer l.Close()
-	return l.Addr().(*net.TCPAddr).Port, nil
+	p, ok := l.Addr().(*net.TCPAddr)
+	if !ok {
+		return 0, fmt.Errorf("could not decode to net.TCPAddr")
+	}
+	return p.Port, nil
 }

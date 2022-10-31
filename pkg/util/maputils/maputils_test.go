@@ -11,7 +11,7 @@ package maputils_test
 import (
 	"testing"
 
-	"github.com/carbonaut/pkg/maputils"
+	"github.com/carbonaut/pkg/util/maputils"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
