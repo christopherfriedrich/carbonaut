@@ -33,4 +33,4 @@ protoc -I="api/v1" --js_out="import_style"="commonjs,binary:./ui/packages/@carbo
 protoc -I="api/v1" --js_out="import_style=commonjs,binary:./ui/packages/@carbonaut-cloud-api/dist" --grpc-web_out="import_style"="typescript,mode=grpcweb:./ui/packages/@carbonaut-cloud-api/dist" api/v1/*/*.proto
 
 # NOTE: Workaround to make generated files usable as dependency
-_log "export * from './ApiServiceClientPb';\nexport * from './api_pb';\r" > ui/packages/@carbonaut-cloud-api/dist/index.ts
+printf "export * from './ApiServiceClientPb';\nexport * from './api_pb';\r" > ui/packages/@carbonaut-cloud-api/dist/index.ts
