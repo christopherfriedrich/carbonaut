@@ -5,6 +5,9 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**"]
     },
+    "web#build": {
+      "env": ["NEXT_PUBLIC_API_URL"]
+    },
     "lint": {
       "outputs": []
     },

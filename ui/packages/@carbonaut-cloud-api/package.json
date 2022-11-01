@@ -6,6 +6,7 @@
   "scripts": {},
   "devDependencies": {},
   "peerDependencies": {
+    "grpc-web": "1.4.1",
     "google-protobuf": "3.21.2"
   }
 }

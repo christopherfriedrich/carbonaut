@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@carbonaut-cloud/web",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -9,22 +9,28 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "grpc-web": "1.4.1",
+    "@carbonaut-cloud/api": "workspace:*",
+    "@carbonaut-cloud/tailwind": "workspace:*",
+    "@carbonaut-cloud/ui": "workspace:*",
+    "@headlessui/react": "^1.7.3",
+    "@heroicons/react": "^2.0.12",
+    "autoprefixer": "^10.4.12",
     "google-protobuf": "3.21.2",
+    "grpc-web": "1.4.1",
     "next": "12.3.1",
+    "postcss": "^8.4.18",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "@carbonaut-cloud/ui": "workspace:*",
-    "@carbonaut-cloud/api": "workspace:*"
+    "tailwindcss": "3.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.19.3",
-    "eslint-config-custom": "workspace:*",
-    "eslint": "8.25.0",
-    "next-transpile-modules": "9.1.0",
-    "tsconfig": "workspace:*",
     "@types/node": "18.11.2",
     "@types/react": "18.0.21",
+    "eslint": "8.25.0",
+    "eslint-config-custom": "workspace:*",
+    "next-transpile-modules": "9.1.0",
+    "tsconfig": "workspace:*",
     "typescript": "4.8.4"
   }
 }

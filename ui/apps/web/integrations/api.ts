@@ -1,19 +1,21 @@
 import * as grpcWeb from 'grpc-web';
-import { GreeterClient, HelloRequest, HelloReply } from '@carbonaut-cloud/api';
+import {
+  EmissionDataClient,
+  ListITResourcesForProjectRequest,
+} from '@carbonaut-cloud/api';
 
-const service = new GreeterClient('http://localhost:8080', null, null);
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
-const request = new HelloRequest();
-request.setName('John');
+if (!API_URL) {
+  throw new Error('Missing environment variable `API_URL`.');
+}
 
-const call = service.sayHello(
-  request,
-  { 'custom-header-1': 'value1' },
-  (error: grpcWeb.RpcError, response: HelloReply) => {
-    console.log(response.getMessage());
-  }
-);
+const service = new EmissionDataClient(API_URL, {});
 
-call.on('status', (status: grpcWeb.Status) => {
-  // ...
-});
+const request = new ListITResourcesForProjectRequest();
+request.setProjectId('123');
+
+export const getResources = async () => {
+  const resources = await service.listITResourcesForProject(request, {});
+  return resources;
+};
