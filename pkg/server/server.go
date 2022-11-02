@@ -21,10 +21,10 @@ type ApiServer struct {
 }
 
 // New api server for the gRPC API
-func New() (ApiServer, error) {
+func New(prometheusAddress string) (ApiServer, error) {
     // TODO: read this from config
 	client, err := promApi.NewClient(promApi.Config{
-		Address: "http://prometheus:9090",
+        Address: prometheusAddress,
 	})
 
 	if err != nil {
