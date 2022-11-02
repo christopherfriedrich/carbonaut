@@ -22,4 +22,4 @@ FROM gcr.io/distroless/static-debian11 as prod
 
 COPY --from=goenv go/bin/analytics /
 
-CMD ["/analytics"]
+CMD ["/main"]

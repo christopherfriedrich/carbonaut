@@ -20,6 +20,6 @@ RUN CGO_ENABLED=0 go build -o /go/bin/api/ ./cmd/api/main.go
 
 FROM gcr.io/distroless/static-debian11 as prod
 
-COPY --from=goenv go/bin/api /
+COPY --from=goenv go/bin/api/ /
 
-CMD ["/api"]
+CMD ["/main"]
