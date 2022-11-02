@@ -46,7 +46,7 @@ func main() {
         log.Info().Msg("API server create responses with fake data")
         api.RegisterEmissionDataServer(s, &fakeServer{})
     } else {
-        apiServer, err := server.New()
+        apiServer, err := server.New("http://prometheus:9090")
         if err != nil {
             log.Fatal().Err(err).Send()
         }
@@ -110,7 +110,7 @@ var (
 	}
 )
 
-func (s *server) ListEmissionsForITResource(ctx context.Context, in *api.ListEmissionsForITResourceRequest) (*api.ListEmissionsForITResourceResponse, error) {
+func (s *fakeServer) ListEmissionsForITResource(ctx context.Context, in *api.ListEmissionsForITResourceRequest) (*api.ListEmissionsForITResourceResponse, error) {
 	return &api.ListEmissionsForITResourceResponse{
 		EmissionData: []*model.Emission{{
 			ItResource: &itResourceA,
@@ -163,7 +163,7 @@ func (s *server) ListEmissionsForITResource(ctx context.Context, in *api.ListEmi
 	}, nil
 }
 
-func (s *server) ListITResourcesForProject(ctx context.Context, in *api.ListITResourcesForProjectRequest) (*api.ListITResourcesForProjectResponse, error) {
+func (s *fakeServer) ListITResourcesForProject(ctx context.Context, in *api.ListITResourcesForProjectRequest) (*api.ListITResourcesForProjectResponse, error) {
 	return &api.ListITResourcesForProjectResponse{
 		ItResources:   []*model.ITResource{&itResourceA, &itResourceB},
 		NextPageToken: "",
