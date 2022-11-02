@@ -17,6 +17,7 @@ import (
 	"github.com/carbonaut/pkg/api"
 	"github.com/carbonaut/pkg/api/model"
 	"github.com/carbonaut/pkg/api/util"
+    "github.com/carbonaut/pkg/server"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
@@ -33,9 +34,7 @@ var (
 func main() {
 	flag.Parse()
 	log.Info().Msg("Starting API server...")
-	if *fakeData {
-		log.Info().Msg("API server create responses with fake data")
-	}
+
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
@@ -43,7 +42,16 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	api.RegisterEmissionDataServer(s, &server{})
+    if *fakeData {
+        log.Info().Msg("API server create responses with fake data")
+        api.RegisterEmissionDataServer(s, &fakeServer{})
+    } else {
+        apiServer, err := server.New()
+        if err != nil {
+            log.Fatal().Err(err).Send()
+        }
+        api.RegisterEmissionDataServer(s, &apiServer)
+    }
 	log.Info().Msgf("API server is listening at %v", lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatal().Err(err)
@@ -51,7 +59,7 @@ func main() {
 }
 
 // server is used to implement carbonaut.UnimplementedEmissionDataServer.
-type server struct {
+type fakeServer struct {
 	api.UnimplementedEmissionDataServer
 }
 

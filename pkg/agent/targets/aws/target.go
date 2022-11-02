@@ -59,7 +59,7 @@ func (Target) Register(a any, r *prometheus.Registry) error {
 		Namespace:   "aws",
 		Name:        "no_of_ec2_instances",
 		Help:        "Number of configured ec2 instances",
-		ConstLabels: map[string]string{},
+		ConstLabels: map[string]string{"provider": "aws", "service": "ec2"},
 	}, []string{"region", "instance_type"})
 
 	r.MustRegister(ec2InstanceGauge)
